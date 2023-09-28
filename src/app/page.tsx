@@ -3,42 +3,34 @@ import { useEffect, useState } from "react"
 import "./globals.css"
 
 export default function Home() {
-  const [alat, setAlat] = useState({
-    lampu: false,
-    kulkas: false
-  })
+  const [listName, setListName] = useState(['Anton'])
+  const [inputName, setInputName] = useState('')
 
-  const [wattTotal, setWattTotal] = useState(0)
+  function addName() {
+    setListName((prev) => ([...prev, inputName]))
+    setInputName("")
+  }
 
-  useEffect(() => {
-    const wattLampu = alat.lampu ? 100 : 0
-    const wattKulkas = alat.kulkas ? 350 : 0
-    setWattTotal(wattLampu + wattKulkas)
-
-  }, [alat])
-
-  function onChangeAlat(alat: "lampu" | "kulkas") {
-    switch (alat) {
-      case "lampu":
-        setAlat((prev) => ({ ...prev, lampu: !prev.lampu }))
-        break;
-      case "kulkas":
-        setAlat((prev) => ({ ...prev, kulkas: !prev.kulkas }))
-        break;
-    }
+  function deleteName(name: string) {
+    setListName((prev) => prev.filter((value) => value !== name))
   }
 
   return (
-    <div>
-      <h1>Total Watt = {wattTotal}</h1>
-      <button
-        onClick={() => onChangeAlat("lampu")}
-        className="bg-black text-white p-2">
-        {!alat.lampu ? "Lampu: Off" : "Lampu: On"}
-      </button>
-      <button onClick={() => onChangeAlat("kulkas")} className="bg-black text-white p-2 ml-4">
-        {!alat.kulkas ? "Kulkas: Off" : "Kulkas: On"}
-      </button>
+    <div className="p-4">
+      <input
+        type="text"
+        name="name"
+        onChange={(e) => setInputName(e.target.value)}
+        value={inputName}
+        className="border"
+        placeholder="Tambahkan Nama" />
+      <button onClick={addName} className="bg-black text-white px-2 ml-2">+</button>
+      <div className="mt-4">
+        <p className="text-xs">List Nama : {listName.length}</p>
+        {listName.map((name) => <div>
+          - {name} <button onClick={() => deleteName(name)} className="bg-red-500 text-white text-xs px-1">x</button>
+        </div>)}
+      </div>
     </div>
   )
 }
