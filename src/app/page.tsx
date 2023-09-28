@@ -1,36 +1,60 @@
 "use client"
+import Article from "@/components/Article"
 import { useEffect, useState } from "react"
-import "./globals.css"
+
+export const defaultArticles: TArticle[] = [
+  {
+    id: 1,
+    title: "Judul Berita 1",
+    content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quas tempora saepe unde aperiam assumenda ratione, debitis repellendus amet. Minima itaque totam officiis iure, nobis deleniti omnis voluptas nihil blanditiis.',
+    createdAt: '16 Mei, 2023',
+    category: "Daerah"
+  },
+  {
+    id: 2,
+    title: "Judul Berita 2",
+    content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quas tempora saepe unde aperiam assumenda ratione, debitis repellendus amet. Minima itaque totam officiis iure, nobis deleniti omnis voluptas nihil blanditiis.',
+    createdAt: '16 Mei, 2023',
+    category: "Daerah"
+  },
+  {
+    id: 3,
+    title: "Judul Berita 3",
+    content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quas tempora saepe unde aperiam assumenda ratione, debitis repellendus amet. Minima itaque totam officiis iure, nobis deleniti omnis voluptas nihil blanditiis.',
+    createdAt: '16 Mei, 2023',
+    category: "Daerah"
+  },
+  {
+    id: 4,
+    title: "Judul Berita 4",
+    content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam quas tempora saepe unde aperiam assumenda ratione, debitis repellendus amet. Minima itaque totam officiis iure, nobis deleniti omnis voluptas nihil blanditiis.',
+    createdAt: '16 Mei, 2023',
+    category: "Daerah"
+  }
+]
 
 export default function Home() {
-  const [listName, setListName] = useState(['Anton'])
-  const [inputName, setInputName] = useState('')
+  const [articles, setArticles] = useState(defaultArticles)
 
-  function addName() {
-    setListName((prev) => ([...prev, inputName]))
-    setInputName("")
-  }
+  useEffect(() => {
+    // mengambil data dari local storage
+    // jika data tidak ada maka set data localstorage tsb menjadi default articles
 
-  function deleteName(name: string) {
-    setListName((prev) => prev.filter((value) => value !== name))
-  }
+    const dataLocalStorage = localStorage.getItem("articles")
+    if (!dataLocalStorage) {
+      localStorage.setItem("articles", JSON.stringify(defaultArticles))
+      return; 
+    }
+
+    setArticles(JSON.parse(dataLocalStorage || "[]"))
+
+  }, [])
 
   return (
-    <div className="p-4">
-      <input
-        type="text"
-        name="name"
-        onChange={(e) => setInputName(e.target.value)}
-        value={inputName}
-        className="border"
-        placeholder="Tambahkan Nama" />
-      <button onClick={addName} className="bg-black text-white px-2 ml-2">+</button>
-      <div className="mt-4">
-        <p className="text-xs">List Nama : {listName.length}</p>
-        {listName.map((name) => <div>
-          - {name} <button onClick={() => deleteName(name)} className="bg-red-500 text-white text-xs px-1">x</button>
-        </div>)}
-      </div>
+    <div className="p-4 flex flex-col gap-4">
+      {articles.map((article) => (
+        <Article article={article} key={article.id} />
+      ))}
     </div>
   )
 }
