@@ -1,5 +1,5 @@
 "use client"
-import { defaultArticles } from '@/app/page'
+import { defaultArticles } from '@/app/defaultArticles'
 import Article from '@/components/Article'
 import React from 'react'
 
